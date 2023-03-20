@@ -1,5 +1,4 @@
 Sub CenterPictures()
-
     Dim shp As Shape
     For Each shp In ActiveDocument.Shapes
         If shp.Type = msoPicture Then
@@ -9,5 +8,4 @@ Sub CenterPictures()
 
         End If
     Next shp
-
 End Sub
