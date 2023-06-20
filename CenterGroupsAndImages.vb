@@ -1,6 +1,8 @@
 Sub CenterGroupsAndImages()
     Dim shp As shape
     Dim pageWidth As Double
+    Dim pageMarginLeft As Double
+    Dim pageMarginRight As Double
     Dim pageMargin As Double
     
     pageWidth = ActiveDocument.PageSetup.pageWidth
@@ -13,4 +15,6 @@ Sub CenterGroupsAndImages()
             shp.Left = pageMargin - (shp.Width / 2)
         End If
     Next shp
+    
+    MsgBox "Centered all shapes"
 End Sub
