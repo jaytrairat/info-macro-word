@@ -19,10 +19,12 @@ Sub CenterGroupsAndImages()
     For Each shp In ActiveDocument.Shapes
         If shp.Type = msoGroup Or shp.Type = msoPicture Then
             shp.Left = centerOfPage - (shp.Width / 2)
-        ElseIf shp.Type = msoTextBox Then
+        Elseif shp.Type = msoTextBox Then
             If InStr(1, shp.TextFrame.TextRange.Text, "...") > 0 Then
                 shp.Left = contentWidth - (shp.Width)
                 shp.Top = contentHeight
+            Elseif shp.TextFrame.TextRange.Paragraphs.Count > 1 Then
+                shp.Left = contentWidth - (shp.Width)
             Else
                 shp.Left = centerOfPage - (shp.Width / 2)
             End If
