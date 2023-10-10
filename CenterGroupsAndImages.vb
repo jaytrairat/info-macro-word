@@ -1,34 +1,25 @@
 Sub CenterGroupsAndImages()
     Dim shp As shape
-    Dim pageWidth As Double
-    Dim pageMarginLeft As Double
-    Dim pageMarginRight As Double
-    Dim pageMargin As Double
-
-    pageWidth = ActiveDocument.PageSetup.pageWidth
-    pageHeight = ActiveDocument.PageSetup.pageHeight
-    pageMarginTop = ActiveDocument.PageSetup.TopMargin
-    pageMarginBottom = ActiveDocument.PageSetup.BottomMargin
-    pageMarginLeft = ActiveDocument.PageSetup.LeftMargin
-    pageMarginRight = ActiveDocument.PageSetup.RightMargin
-
-    contentHeight = pageHeight - pageMarginTop - pageMarginBottom
-    contentWidth = pageWidth - pageMarginLeft - pageMarginRight
+    Dim contentWidth As Double
+    Dim centerOfPage As Double
+    
+    contentWidth = ActiveDocument.PageSetup.pageWidth - ActiveDocument.PageSetup.LeftMargin - ActiveDocument.PageSetup.RightMargin
     centerOfPage = contentWidth / 2
 
     For Each shp In ActiveDocument.Shapes
-        If shp.Type = msoGroup Or shp.Type = msoPicture Then
-            shp.Left = centerOfPage - (shp.Width / 2)
-        Elseif shp.Type = msoTextBox Then
-            If InStr(1, shp.TextFrame.TextRange.Text, "...") > 0 Then
-                shp.Left = contentWidth - (shp.Width)
-                shp.Top = contentHeight
-            Elseif shp.TextFrame.TextRange.Paragraphs.Count > 1 Then
-                shp.Left = contentWidth - (shp.Width)
-            Else
+        Select Case shp.Type
+            Case msoGroup, msoPicture
                 shp.Left = centerOfPage - (shp.Width / 2)
-            End If
-        End If
+            Case msoTextBox
+                If shp.TextFrame.TextRange.Paragraphs.Count > 1 Then
+                    shp.Left = contentWidth - shp.Width
+                ElseIf InStr(shp.TextFrame.TextRange.Text, "/") <> 0 Then
+                    shp.Left = contentWidth - shp.Width
+                    shp.Top = ActiveDocument.PageSetup.pageHeight - ActiveDocument.PageSetup.BottomMargin
+                Else
+                    shp.Left = centerOfPage - (shp.Width / 2)
+                End If
+        End Select
     Next shp
 
     MsgBox "Centered all shapes"
